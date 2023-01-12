@@ -4,17 +4,19 @@ from .models import Task
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import DeleteView, FormView
 from django.urls import reverse_lazy
 
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import UserCreationForm
+
 
 
 
 
 # Create your views here.
-
+#Login View
 class userLoginView(LoginView):
     template_name = 'base/login.html'
     fields = '__all__'
@@ -22,6 +24,20 @@ class userLoginView(LoginView):
 
     def get_success_url(self):
         return reverse_lazy('tasks')
+
+
+#registration View
+class userRegisterPage(FormView):
+    template_name = 'base/register.html'
+    form_class = UserCreationForm
+    redirect_authenticated_user = True
+    success_url = reverse_lazy('tasks')
+
+    def form_valid(self, form):
+        user = form.save()
+        if user is not None:
+            LoginView(self.request, user)
+        return super(userRegisterPage, self).form_valid(form)
 
 
 #CRUD Classes

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import taskDelete, taskList, taskUpdate, userLoginView
+from .views import taskDelete, taskList, taskUpdate, userLoginView, userRegisterPage
 from .views import taskDetail
 from .views import taskCreate
 from django.contrib.auth.views import LogoutView
@@ -10,6 +10,8 @@ urlpatterns = [
 
     #Login URL 
     path('login/', userLoginView.as_view(), name='login'),
+    path('register/', userRegisterPage.as_view(), name='register'),
+
     #Logout URL
     path('logout/', LogoutView.as_view(next_page = 'login'), name='logout'),
 
