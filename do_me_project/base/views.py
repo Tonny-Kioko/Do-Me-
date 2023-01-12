@@ -54,6 +54,13 @@ class taskList(LoginRequiredMixin, ListView):
         polished =  super().get_context_data(**kwargs)
         polished['tasks'] = polished['tasks'].filter(user = self.request.user)
         polished['count'] = polished['tasks'].filter(complete = False).count()
+
+        search_tasks = self.request.GET.get('search') or "Search for Tasks"
+        if search_tasks:
+            polished['tasks'] = polished['tasks'].filter(title__icontains= search_tasks)
+
+        polished['search_tasks'] = search_tasks
+        
         return polished
 
     
@@ -83,4 +90,6 @@ class taskUpdate(LoginRequiredMixin, UpdateView):
 class taskDelete(LoginRequiredMixin, DeleteView):
     model = Task
     context_object_name = 'task' 
-    success_url = reverse_lazy('tasks')   
+    success_url = reverse_lazy('tasks')  
+
+
