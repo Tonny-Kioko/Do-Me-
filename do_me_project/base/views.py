@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.list import ListView
 from .models import Task
 from django.views.generic.detail import DetailView
@@ -29,8 +29,7 @@ class userLoginView(LoginView):
 #registration View
 class userRegisterPage(FormView):
     template_name = 'base/register.html'
-    form_class = UserCreationForm
-    redirect_authenticated_user = True
+    form_class = UserCreationForm    
     success_url = reverse_lazy('tasks')
 
     def form_valid(self, form):
@@ -38,6 +37,11 @@ class userRegisterPage(FormView):
         if user is not None:
             LoginView(self.request, user)
         return super(userRegisterPage, self).form_valid(form)
+
+    def get(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect ('tasks')
+        return super(userRegisterPage, self).get(*args, **kwargs)
 
 
 #CRUD Classes
