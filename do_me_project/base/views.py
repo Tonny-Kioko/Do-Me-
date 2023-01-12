@@ -8,6 +8,8 @@ from django.views.generic.edit import DeleteView
 from django.urls import reverse_lazy
 
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 
 
@@ -24,29 +26,29 @@ class userLoginView(LoginView):
 
 #CRUD Classes
 
-class taskList(ListView):
+class taskList(LoginRequiredMixin, ListView):
     model = Task
     context_object_name = 'tasks'
 
 
-class taskDetail(DetailView):
+class taskDetail(LoginRequiredMixin, DetailView):
     model = Task
     context_object_name = 'task'
     template_name = 'base/task.html'
 
 
-class taskCreate(CreateView):
+class taskCreate(LoginRequiredMixin, CreateView):
     model = Task
     fields = '__all__'
     success_url = reverse_lazy('tasks')
 
 
-class taskUpdate(UpdateView):
+class taskUpdate(LoginRequiredMixin, UpdateView):
     model = Task
     fields = '__all__'
     success_url = reverse_lazy('tasks')
 
-class taskDelete(DeleteView):
+class taskDelete(LoginRequiredMixin, DeleteView):
     model = Task
     context_object_name = 'task' 
     success_url = reverse_lazy('tasks')   
