@@ -8,7 +8,7 @@ class Task(models.Model):
     title = models.CharField(max_length=200, null = True, blank=True)
     description = models.TextField(null = True, blank=True)
     complete = models.BooleanField(default=False)
-    created_on = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
     
 
     def __str__(self):

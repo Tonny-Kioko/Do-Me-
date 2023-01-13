@@ -6,10 +6,14 @@ from django.views.generic.edit import CreateView
 from django.views.generic.edit import UpdateView
 from django.views.generic.edit import DeleteView, FormView
 from django.urls import reverse_lazy
+from django.contrib.auth import login
 
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
+from .forms import PositionForm
+from django.db import transaction
+from django.views import View
 
 
 
@@ -29,13 +33,14 @@ class userLoginView(LoginView):
 #registration View
 class userRegisterPage(FormView):
     template_name = 'base/register.html'
-    form_class = UserCreationForm    
+    form_class = UserCreationForm
+    redirect_authenticated_user = True    
     success_url = reverse_lazy('tasks')
 
     def form_valid(self, form):
         user = form.save()
         if user is not None:
-            LoginView(self.request, user)
+            login(self.request, user)
         return super(userRegisterPage, self).form_valid(form)
 
     def get(self, *args, **kwargs):
@@ -51,17 +56,17 @@ class taskList(LoginRequiredMixin, ListView):
     context_object_name = 'tasks'
 
     def get_context_data(self, **kwargs):
-        polished =  super().get_context_data(**kwargs)
-        polished['tasks'] = polished['tasks'].filter(user = self.request.user)
-        polished['count'] = polished['tasks'].filter(complete = False).count()
+        context =  super().get_context_data(**kwargs)
+        context['tasks'] = context['tasks'].filter(user = self.request.user)
+        context['count'] = context['tasks'].filter(complete = False).count()
 
-        search_tasks = self.request.GET.get('search') or "Search for Tasks"
+        search_tasks = self.request.GET.get('search') or " "
         if search_tasks:
-            polished['tasks'] = polished['tasks'].filter(title__icontains= search_tasks)
+            context['tasks'] = context['tasks'].filter(title__contains= search_tasks)
 
-        polished['search_tasks'] = search_tasks
-        
-        return polished
+        context['search_tasks'] = search_tasks
+
+        return context
 
     
 
@@ -91,5 +96,18 @@ class taskDelete(LoginRequiredMixin, DeleteView):
     model = Task
     context_object_name = 'task' 
     success_url = reverse_lazy('tasks')  
+
+
+class TaskReorder(View):
+    def post(self, request):
+        form = PositionForm(request.POST)
+
+        if form.is_valid():
+            positionList = form.cleaned_data["position"].split(',')
+
+            with transaction.atomic():
+                self.request.user.set_task_order(positionList)
+
+        return redirect(reverse_lazy('tasks'))
 
 
