@@ -2,16 +2,16 @@
 This is a basic Task Manager App. It lets users monitor their pending tasks, add more or remove those completed
 
 ## User registration
-![Registration Page](register.png)
+![Registration Page](task-manager/register.png)
 
 ## User Login
-![Login Page](login.png)
+![Login Page](task-manager/login.png)
 
 ## A display of the user account
-![User Menu Page](mainpage.png)
+![User Menu Page](task-manager/mainpage.png)
 
 ## App Functionality
-![Functionality Page](functionality.png)
+![Functionality Page](task-manager/functionality.png)
 
 
 
