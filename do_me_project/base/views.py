@@ -54,15 +54,19 @@ class userRegisterPage(FormView):
 class taskList(LoginRequiredMixin, ListView):
     model = Task
     context_object_name = 'tasks'
+    template_name = 'base/task_list.html'
 
     def get_context_data(self, **kwargs):
         context =  super().get_context_data(**kwargs)
         #context['tasks'] = context['tasks'].filter(user = self.request.user)
         context['count'] = context['tasks'].filter(complete = False).count()
 
+        
         search_tasks = self.request.GET.get('search') or " "
         if search_tasks:
-            context['tasks'] = context['tasks'].filter(title__contains= search_tasks)
+            context['tasks'] = context['tasks'].filter(title__icontains= search_tasks)
+            context['count'] = context['tasks'].filter(complete = False).count()
+
 
         context['search_tasks'] = search_tasks
 
