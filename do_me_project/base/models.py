@@ -16,3 +16,23 @@ class Task(models.Model):
 
     class Meta:
         ordering = ["complete"]
+
+
+class Rectangle:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+ 
+    def get_area(self):
+        return self.width * self.height
+ 
+    def set_width(self, width):
+        self.width = width
+ 
+    def set_height(self, height):
+        self.height = height
+
+    def calculate_area_rectangle(width, height):
+        return width * height
+
+    print (calculate_area_rectangle(10, 2))
