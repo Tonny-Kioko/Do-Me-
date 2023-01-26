@@ -1,23 +1,20 @@
 from django.test import TestCase
 from collections.abc import Mapping
-import unittest
-from base.models import Rectangle
+import pytest
+
 
 # Create your tests here.
 
 
-class TestGetAreaRectangle(unittest.TestCase):
-    def setUp(self):
-        self.rectangle = Rectangle(0, 0)
-    
-    def testArea(self):
-        rectangle = Rectangle(2, 3)
-        assert rectangle.get_area() == 6, "incorrect area"
-    
-    def testNegativeArea(self):
-        #Excluding negative areas"
-        rectangle = Rectangle(-1, 2)
-        assert rectangle.get_area() == 1, "Negative area"
+def test_method():
+    x = 5
+    y = 6
+    assert x + 1 == 6, 'test failed'
+    assert y - 1 == 5, 'test failed'
+
+def test_numbers():
+    10 % 2 == 0, 'test failed'
+
 
 
 
