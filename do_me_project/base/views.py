@@ -30,6 +30,7 @@ class userLoginView(LoginView):
         return reverse_lazy('tasks')
 
 
+
 #registration View
 class userRegisterPage(FormView):
     template_name = 'base/register.html'
